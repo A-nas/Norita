@@ -425,8 +425,27 @@ namespace Tests.Interfaces
 
         private async void button7_Click(object sender, EventArgs e)
         {
-            string response = await GetRequest<string>();
-            MessageBox.Show(response);
+            //string response = await GetRequest<string>();
+            //MessageBox.Show(response);
+            //writ into document
+            //writeIntoFile(response);
+            HttpRequestMessage reqMessage;
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("https://httpbin.org/post");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://httpbin.org/post");
+
+            byte[] bytes = System.IO.File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\Nouveau dossier\test.pdf");
+            string file = Convert.ToBase64String(bytes);
+            request.Content = new StringContent("{\"name\":\"John Doe\", \"age\":33 \"file\":[\"" + file + ";filename=demande.pdf;application/octet-stream\";\"" + file + ";filename=demande.pdf;application/octet-stream\"]}",
+                                    Encoding.UTF8,
+                                    "application/json");//CONTENT-TYPE header
+
+            HttpResponseMessage response = await client.SendAsync(request);
+            string contents = await response.Content.ReadAsStringAsync();
+            writeIntoFile(contents);
+            //return contents;
+
         }
 
         public async static Task<string> GetRequest<T>()
@@ -460,18 +479,15 @@ namespace Tests.Interfaces
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://httpbin.org/post");
 
-                byte[] bytes = System.IO.File.ReadAllBytes(@"C:\Users\Anas\Desktop\test.pdf");
-                string file = "";
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    file += Convert.ToString(bytes[i]);
-                }
+                byte[] bytes = System.IO.File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\Nouveau dossier\test.pdf");
+                string file = Convert.ToBase64String(bytes);
                 request.Content = new StringContent("{\"name\":\"John Doe\", \"age\":33 \"file\":[\"" + file + ";filename=demande.pdf;application/octet-stream\";\"" + file + ";filename=demande.pdf;application/octet-stream\"]}",
                                         Encoding.UTF8,
                                         "application/json");//CONTENT-TYPE header
                 
                 HttpResponseMessage response = await client.SendAsync(request);
                 string contents = await response.Content.ReadAsStringAsync();
+                writeIntoFile(contents);
                 return contents;
             }
             catch
@@ -479,5 +495,20 @@ namespace Tests.Interfaces
                 return default(string);
             }
         }
+
+
+        // write string to file (mes document)
+        private static void writeIntoFile(string toWrite)
+        {
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // (mes documents)
+            using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\outGED.txt"))
+            {
+                outputFile.WriteLine(toWrite);
+
+            }
+        }
+
+
+
     }
 }
