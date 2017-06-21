@@ -435,27 +435,44 @@ namespace Tests.Interfaces
             string url = "https://httpbin.org/post";
             try
             {
-                // preparing data te bo sent
-                HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); //accepte Header
-                client.DefaultRequestHeaders.Add("Content-Type", "application/json");
+                    // preparing data te bo sent
+                //HttpClient client = new HttpClient();
+                //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); //accepte Header
+                //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
 
-                var arbitrage = new StringContent("arbitrageAsJson"); //StringContent herits from HttpContent used in PostAsync
-                var sending = await client.PostAsync(url, arbitrage);
+                //var arbitrage = new StringContent("arbitrageAsJson"); //StringContent herits from HttpContent used in PostAsync
+                //var sending = await client.PostAsync(url, arbitrage);
 
 
-                //get response
-                var contents = await sending.Content.ReadAsStringAsync();
-                return contents;
-                //return Newtonsoft.Json.JsonConvert.DeserializeObject<string>(contents);
-                //HttpResponseMessage response = await client.GetAsync(url);
-                //string json = await response.Content.ReadAsStringAsync();
-                //return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+                    //get response
+                //var contents = await sending.Content.ReadAsStringAsync();
+                //return contents;
+                    //return Newtonsoft.Json.JsonConvert.DeserializeObject<string>(contents);
+                    //HttpResponseMessage response = await client.GetAsync(url);
+                    //string json = await response.Content.ReadAsStringAsync();
+                    //return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
 
 
                 // test 2 this must be working.
-                //HttpRequestMessage reqMessage;
+                HttpRequestMessage reqMessage;
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri("https://httpbin.org/post");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://httpbin.org/post");
+
+                byte[] bytes = System.IO.File.ReadAllBytes(@"C:\Users\Anas\Desktop\test.pdf");
+                string file = "";
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    file += Convert.ToString(bytes[i]);
+                }
+                request.Content = new StringContent("{\"name\":\"John Doe\", \"age\":33 \"file\":[\"" + file + ";filename=demande.pdf;application/octet-stream\";\"" + file + ";filename=demande.pdf;application/octet-stream\"]}",
+                                        Encoding.UTF8,
+                                        "application/json");//CONTENT-TYPE header
                 
+                HttpResponseMessage response = await client.SendAsync(request);
+                string contents = await response.Content.ReadAsStringAsync();
+                return contents;
             }
             catch
             {
