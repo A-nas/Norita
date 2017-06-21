@@ -425,29 +425,48 @@ namespace Tests.Interfaces
 
         private async void button7_Click(object sender, EventArgs e)
         {
-            //string response = await GetRequest<string>();
-            //MessageBox.Show(response);
-            //writ into document
-            //writeIntoFile(response);
-            HttpRequestMessage reqMessage;
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("https://httpbin.org/post");
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://httpbin.org/post");
+            try
+            {
+                //string url = "https://httpbin.org/post";
+                string url = "https://NORTIAWS:a*yixw9.8sq@api-recette.spirica.fr/sylveaRS/v1/contrats/113110000/arbitrages";
+                HttpClient client = new HttpClient();
+                //set request headers
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
 
-            byte[] bytes = System.IO.File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\Nouveau dossier\test.pdf");
-            string file = Convert.ToBase64String(bytes);
-            request.Content = new StringContent("{\"name\":\"John Doe\", \"age\":33 \"file\":[\"" + file + ";filename=demande.pdf;application/octet-stream\";\"" + file + ";filename=demande.pdf;application/octet-stream\"]}",
-                                    Encoding.UTF8,
-                                    "application/json");//CONTENT-TYPE header
+                var requestContent = new MultipartFormDataContent();
+                //    here you can specify boundary if you need---^
 
-            HttpResponseMessage response = await client.SendAsync(request);
-            string contents = await response.Content.ReadAsStringAsync();
-            writeIntoFile(contents);
-            //return contents;
+                // read bytes 
+                var pdfdemande = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf"));
+                var pdfArbitrage = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\dossier_arbitrage.pdf"));
+                var json = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\fluxJson.json"));
+                // end read bytes
 
+                //var jsonContent = new ByteArrayContent("str");
+                json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+                pdfdemande.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+                pdfArbitrage.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+
+                // add all content
+                requestContent.Add(json, "arbitrage");
+                requestContent.Add(pdfdemande, "file", "demande.pdf");
+                requestContent.Add(pdfArbitrage, "file", "demande.pdf");
+
+                var message = await client.PostAsync(url, requestContent);
+                var content = await message.Content.ReadAsStringAsync();
+
+                writeIntoFile(content);
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
+
+        // a effacer 
         public async static Task<string> GetRequest<T>()
         {
             //after //string url = "https://NORTIAWS:a*yixw9.8sq@api-recette.spirica.fr/sylveaRS/v1/contrats/113110000/arbitrages";
@@ -494,6 +513,38 @@ namespace Tests.Interfaces
             {
                 return default(string);
             }
+        }
+
+
+        // a implementer
+        public static async Task<string> Upload()
+        {
+            //static data
+            string  url = "https://httpbin.org/post";
+
+            HttpClient client = new HttpClient();
+            var requestContent = new MultipartFormDataContent();
+            //    here you can specify boundary if you need---^
+            
+            // read bytes
+            var pdfdemande = new ByteArrayContent(System.IO.File.ReadAllBytes(@"C:\Users\Anas\Desktop\demande.pdf"));
+            var pdfArbitrage = new ByteArrayContent(System.IO.File.ReadAllBytes(@"C:\Users\Anas\Desktop\dossier_arbitrage.pdf"));
+            var json = new ByteArrayContent(System.IO.File.ReadAllBytes(@"C:\Users\Anas\Desktop\fluxJson.json"));
+            // end read bytes
+
+            //var jsonContent = new ByteArrayContent("str");
+            json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            pdfdemande.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+            pdfArbitrage.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+
+            // add all content
+            requestContent.Add(json);
+            requestContent.Add(pdfdemande);
+            requestContent.Add(pdfArbitrage);
+
+            var message = await client.PostAsync(url, requestContent);
+            var content = await message.Content.ReadAsStringAsync();
+            return content;
         }
 
 
