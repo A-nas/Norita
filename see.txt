@@ -1,0 +1,2 @@
+https://stackoverflow.com/questions/10679214/how-do-you-set-the-content-type-header-for-an-httpclient-request
+https://stackoverflow.com/questions/4980912/username-and-password-in-https-url ***
