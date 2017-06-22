@@ -15,6 +15,8 @@ using GED.Handlers;
 // call web service (not tested yet)
 using System.Net.Http;
 using System.Net.Http.Headers;
+// for webProxyClass
+using System.Net;
 
 
 namespace Tests.Interfaces
@@ -428,8 +430,17 @@ namespace Tests.Interfaces
             try
             {
                 //string url = "https://httpbin.org/post";
+
+                HttpClientHandler handler = new HttpClientHandler()
+                {
+                    Proxy = new WebProxy("http://192.168.10.238:808"),
+                    UseProxy = true,
+                };
+
                 string url = "https://NORTIAWS:a*yixw9.8sq@api-recette.spirica.fr/sylveaRS/v1/contrats/113110000/arbitrages";
-                HttpClient client = new HttpClient();
+                HttpClient client = new HttpClient(handler);
+                var byteArray = Encoding.ASCII.GetBytes("NORTIAWS:a*yixw9.8sq");
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
                 //set request headers
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
@@ -451,7 +462,7 @@ namespace Tests.Interfaces
                 // add all content
                 requestContent.Add(json, "arbitrage");
                 requestContent.Add(pdfdemande, "file", "demande.pdf");
-                requestContent.Add(pdfArbitrage, "file", "demande.pdf");
+                requestContent.Add(pdfArbitrage, "file", "dossier_arbitrage.pdf");
 
                 var message = await client.PostAsync(url, requestContent);
                 var content = await message.Content.ReadAsStringAsync();
