@@ -17,7 +17,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 // for webProxyClass
 using System.Net;
-
+//for Burp suite debug
+using System.Security.Cryptography.X509Certificates;
 
 namespace Tests.Interfaces
 {
@@ -436,9 +437,14 @@ namespace Tests.Interfaces
                     Proxy = new WebProxy("http://192.168.10.238:808"),
                     UseProxy = true,
                 };
+                // set certificat authority
+                handler.ClientCertificateOptions = ClientCertificateOption.Automatic;
 
-                string url = "https://NORTIAWS:a*yixw9.8sq@api-recette.spirica.fr/sylveaRS/v1/contrats/113110000/arbitrages";
-                HttpClient client = new HttpClient(handler);
+                //handler.SslProtocols = SslProtocols.Tls12;
+                //handler.ClientCertificates.Add(new X509Certificate2("cert.crt"));
+
+                string url = "https://NORTIAWS:a*yixw9.8sq@api-recette.spirica.fr/sylveaRS/v1/contrats/113100030/arbitrages";
+                HttpClient client = new HttpClient();//handler
                 var byteArray = Encoding.ASCII.GetBytes("NORTIAWS:a*yixw9.8sq");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
                 //set request headers
@@ -468,7 +474,6 @@ namespace Tests.Interfaces
                 var content = await message.Content.ReadAsStringAsync();
 
                 writeIntoFile(content);
-
             }
             catch(Exception ex)
             {
