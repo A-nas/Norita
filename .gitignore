@@ -297,7 +297,7 @@ __pycache__/
 /GED.Interface
 /GED.InterfaceNI
 /GED.Tools
-/GenerationProd
+GenerationProd
 /IndexationGED
 /IndexationGED
 /IntegrationAvenant
@@ -308,5 +308,7 @@ __pycache__/
 /WS_GED
 /suivieDeTransfer
 /GED_SSIS
-
+# a indexer !
+!/GenerationProd
 !/Tests.Interfaces
+GenerationProd/Web*.config
