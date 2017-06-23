@@ -443,7 +443,7 @@ namespace Tests.Interfaces
                 //handler.SslProtocols = SslProtocols.Tls12;
                 //handler.ClientCertificates.Add(new X509Certificate2("cert.crt"));
 
-                string url = "https://NORTIAWS:a*yixw9.8sq@api-recette.spirica.fr/sylveaRS/v1/contrats/113100030/arbitrages";
+                string url = "https://api-recette.spirica.fr/sylveaRS/v1/contrats/113100030/arbitrages";
                 HttpClient client = new HttpClient();//handler
                 var byteArray = Encoding.ASCII.GetBytes("NORTIAWS:a*yixw9.8sq");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
