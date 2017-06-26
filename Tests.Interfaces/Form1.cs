@@ -443,7 +443,7 @@ namespace Tests.Interfaces
                 //handler.SslProtocols = SslProtocols.Tls12;
                 //handler.ClientCertificates.Add(new X509Certificate2("cert.crt"));
 
-                string url = "https://api-recette.spirica.fr/sylveaRS/v1/contrats/113100030/arbitrages";
+                string url = "https://api-recette.spirica.fr/sylveaRS/v1/contrats/113100096/arbitrages";
                 HttpClient client = new HttpClient();//handler
                 var byteArray = Encoding.ASCII.GetBytes("NORTIAWS:a*yixw9.8sq");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
@@ -452,12 +452,12 @@ namespace Tests.Interfaces
                 client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
 
                 var requestContent = new MultipartFormDataContent();
-                //    here you can specify boundary if you need---^
+                //    here you can specify boundary if you need---^ (no thanks no boundaries)
 
                 // read bytes 
                 var pdfdemande = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf"));
                 var pdfArbitrage = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\dossier_arbitrage.pdf"));
-                var json = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\fluxJson.json"));
+                var json = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\fluxJson2.json"));
                 // end read bytes
 
                 //var jsonContent = new ByteArrayContent("str");
