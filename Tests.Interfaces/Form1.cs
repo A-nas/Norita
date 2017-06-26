@@ -457,7 +457,7 @@ namespace Tests.Interfaces
                 // read bytes 
                 var pdfdemande = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf"));
                 var pdfArbitrage = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\dossier_arbitrage.pdf"));
-                var json = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\fluxJson2.json"));
+                var json = new ByteArrayContent(File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\fluxJson3.json"));
                 // end read bytes
 
                 //var jsonContent = new ByteArrayContent("str");
