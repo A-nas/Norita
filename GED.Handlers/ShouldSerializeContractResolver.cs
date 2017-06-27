@@ -13,7 +13,7 @@ namespace GED.Handlers
      public class ShouldSerializeContractResolver : DefaultContractResolver
     {
         public ShouldSerializeContractResolver() { }
-
+        // a mettre dans definition
         List<string> pptActeNames = new List<string> { "reference_externe", "desinvestissements", "reinvestissements", "pieces", "commentaire", "support_saisie", "code_support", "pourcentage", "montant" ,"nom","type"};
         
         

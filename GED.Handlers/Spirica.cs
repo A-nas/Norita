@@ -13,28 +13,93 @@ using System.IO;
 using System.Threading;
 // a effecer apres
 using System.Windows.Forms;
+// call web service (not tested yet)
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 
 namespace GED.Handlers
 {
-    // Classe qui concerne SPIRICA (prod {json,pdf})
     public class Spirica : Acte,IActe
     {
-        List<Spirica> production = new List<Spirica>();
 
-        [JsonProperty(PropertyName = "support_saisie", Order = 5)]
-        private string supsaisie = "bo";
-        [JsonProperty(PropertyName = "pieces", Order = 7)]
-        public List<DetailPiece> pieces = new List<DetailPiece>();
-        [JsonProperty(PropertyName = "file", Order = 999)]
-        public string fichiers; // cette propriete ontint les fichiers binaire et leurs noms  
+        // generate JSON string for the current instance
+        private string genJson()
+        {
+            JsonSerializerSettings jsonSetting = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                ContractResolver = new ShouldSerializeContractResolver()
+            };
+            return JsonConvert.SerializeObject(this, jsonSetting);
+        }
+
+
+        // fetch for all files including name,extension,binaries for the current (this) "NumContrat"
+        private List<binaries> fetchPieces()
+        {
+            List<binaries> bins = new List<binaries>();
+            SqlConnection con = Definition.connexion;
+            SqlCommand cmd = new SqlCommand("select [Nom],[Extension],[Datas] from pli where CleSalesForce = @id_contrat", con);
+            cmd.Parameters.AddWithValue("@id_contrat", (Object) this.NumContrat ?? DBNull.Value);
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                bins.Add(new binaries
+                {
+                    nomFichie = reader[0].ToString(),
+                    extention = reader[1].ToString(),
+                    ficheirPDF = (byte[]) reader[2]
+                });
+            }
+            reader.Close();
+            con.Close();
+            return bins;
+        }
+
+
+
+        // Async methode to call RESTful Sylvea API, this method return string type when the call is finished, TASK<string> else.
+        public async Task<string> sendProd()
+        {
+            // preparing request HEADERS
+            HttpClientHandler handler = new HttpClientHandler();
+            HttpClient client = new HttpClient();
+            byte[] Basic_Auth = Encoding.ASCII.GetBytes(Definition.id+":"+Definition.pass); // tester cet appel je vais pas y revenir une autre fois.
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Basic_Auth));
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
+            //preparing request BODY
+            MultipartFormDataContent requestContent = new MultipartFormDataContent();
+            ByteArrayContent json = new ByteArrayContent(Encoding.UTF8.GetBytes(genJson())); // encodage a verifier apres !!
+            json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            requestContent.Add(json, "arbitrage");
+            List<binaries> bins = fetchPieces();
+            foreach(binaries bin in bins)
+            {
+                var binaryFile = new ByteArrayContent(bin.ficheirPDF);
+                binaryFile.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+                requestContent.Add(binaryFile, "file", bin.nomFichie + bin.extention );
+            }
+            //POST ASYNC CALL
+            HttpResponseMessage message = await client.PostAsync(Definition.url+this.NumContrat+ "/arbitrages", requestContent);
+            string content = await message.Content.ReadAsStringAsync();
+            //We are waiting for JSON response !
+            return content;
+        }
+
+        
+        //#############################################################################################################################//
+
 
         // pointeur de fonction PreProcessInformation appelé quand l'envoie asynchrone est fini
         private delegate void finishTask(SftpClient cli, FileStream fs, IAsyncResult ar);
 
         public Spirica() { }
         //passez par ce constructeur au moment de la generation (le cast ne marche pas)
-        public Spirica(List<Acte> actes)
+       /* public Spirica(List<Acte> actes)
         {
             foreach(Acte a in actes)
             {
@@ -66,8 +131,9 @@ namespace GED.Handlers
             //fill missing data
             getDetailPiece();
 
-    }
+    }*/
 
+            /*
         // cherche les details des documents (nom et type) et rempli la liste d'objet Spirica.pieces
         private void getDetailPiece()
         {
@@ -93,10 +159,10 @@ namespace GED.Handlers
                 id_docNortia.Clear();
             }
 
-        }
+        }*/
 
         // genere la prod en Json
-        public string genJSON() // ca c'est moche
+       /* public string genJSON() //OBSELETE
         {
                         JsonSerializerSettings jsonSetting = new JsonSerializerSettings
             {
@@ -106,10 +172,10 @@ namespace GED.Handlers
                 ContractResolver = new ShouldSerializeContractResolver()
             };
             return JsonConvert.SerializeObject(production, jsonSetting);
-        }
+        }*/
 
-        //envoie la prod PDF (pdfs separés)
-        public void sendProd()
+        //envoie la prod PDF (pdfs separés) OBSELETE
+        /*public void sendProd()
         {
             try
             {
@@ -132,8 +198,7 @@ namespace GED.Handlers
             {
                 MessageBox.Show(ex.Message);
             }   
-        }
-
+        }*/
 
         //## UPDATE PROGRESS BAR ON FOREGROUD THREAD
         private void UpdateProgresBar(ulong uploaded)
@@ -155,6 +220,7 @@ namespace GED.Handlers
         }
         
 
+        // show remote sftp files
         public static void showFiles(string dir = "//SPIRICA//" ){
             IEnumerable<string> str = null;
 
@@ -178,3 +244,9 @@ namespace GED.Handlers
     }
 }
 
+public class binaries
+{
+    public byte[] ficheirPDF;
+    public string nomFichie;
+    public string extention;
+}

@@ -12,7 +12,7 @@ namespace GED.Handlers
     {
         public string NomType { get; set; }
         public string NomActeAdministratif { get; set; }
-        [JsonProperty(PropertyName = "reference_externe", Order = 1)]
+        [JsonProperty(PropertyName = "ne", Order = 1)]
         public string ReferenceInterne { get; set; }
         public string NomCompletSouscripteurs { get; set; }
         public string NumContrat { get; set; }
@@ -38,6 +38,12 @@ namespace GED.Handlers
         public string Commentaire { get; set; }
         public bool InvestissementImmediat { get; set; }
         public bool Regul { get; set; }
+
+        // proprietes a alimentés
+        [JsonProperty(PropertyName = "support_saisie", Order = 5)]
+        private string supsaisie = "bo";
+        [JsonProperty(PropertyName = "pieces", Order = 7)]
+        public List<DetailPiece> pieces = new List<DetailPiece>();
 
 
         public Acte()

@@ -13,6 +13,13 @@ namespace GED.Handlers
     {
         // #### CLASS TO HANDLE ALL MY TMP CONFIG VARS #### (a déplacé vers un fichier de configuration)
 
+        //RESTFUL PARAMS
+        public static readonly string url = "https://api-recette.spirica.fr/sylveaRS/v1/contrats/"; //113100096/arbitrages";
+        public static readonly string id = "NORTIAWS";
+        public static readonly string pass = "a*yixw9.8sq"; // auth is base64(id:pass)
+
+
+
         // SFTP PARAMS
         public static readonly string sftpHost = "home663743708.1and1-data.host"; //home663743708.1and1-data.host
         public static readonly string sftpPswd = "ananass123";

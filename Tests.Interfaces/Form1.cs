@@ -389,7 +389,7 @@ namespace Tests.Interfaces
                 {
                     outputFile.WriteLine(json);
                 }
-            }else
+            }else // for a liste of Actes
             {
                 //test with final class
                 //Spirica spirica = new Spirica(la);
