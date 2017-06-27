@@ -293,7 +293,6 @@ __pycache__/
 /CopieProd
 /DSCapture
 /GED.Consultation
-/GED.Handlers
 /GED.Interface
 /GED.InterfaceNI
 /GED.Tools
@@ -312,3 +311,5 @@ GenerationProd
 !/GenerationProd
 !/Tests.Interfaces
 GenerationProd/Web*.config
+GED.Handlers/Web*.config*
+!/GED.Handlers
