@@ -9,6 +9,8 @@ namespace GED.Handlers
 {
     public class Repartition
     {
+
+
         [JsonProperty(PropertyName = "code_support")]
         public string CodeISIN { get; set; }
         public string TypeRepartition { get; set; } // % ou €

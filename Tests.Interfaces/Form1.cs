@@ -393,19 +393,19 @@ namespace Tests.Interfaces
             {
                 //test with final class
                 //Spirica spirica = new Spirica(la);
-                IActe acte = new Spirica(la);
-                string json = acte.genJSON();
+                 // IActe acte = new Spirica(la);
+                //  string json = acte.genJSON();
 
                 string mydocpath =
                             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // (mes documents)
                 using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\SpiricaJson.txt"))
                 {
-                    outputFile.WriteLine(json);
+                    //outputFile.WriteLine(json);
                 }
                 //MessageBox.Show(json);
                 
                 Definition.setProgressBar(progressBar1);
-                acte.sendProd();
+                //acte.sendProd();
             }
         }
 
@@ -575,7 +575,9 @@ namespace Tests.Interfaces
             }
         }
 
-
-
+        private void button8_Click(object sender, EventArgs e)
+        { }
+            Production prod = new Production();
+        }
     }
 }

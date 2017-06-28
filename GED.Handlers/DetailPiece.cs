@@ -14,7 +14,6 @@ namespace GED.Handlers
         [JsonProperty(PropertyName = "nom")]
         public string nomFichier {get; set;}
         [JsonProperty(PropertyName = "type")]
-
         public string typeFicher { get; set;}
 
         // a modifier pour retourner la ref
