@@ -39,6 +39,7 @@ namespace Tests.Interfaces
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -131,11 +132,22 @@ namespace Tests.Interfaces
             this.label1.TabIndex = 8;
             this.label1.Text = "Progress bar transfer";
             // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(131, 238);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(115, 60);
+            this.button8.TabIndex = 9;
+            this.button8.Text = "Dernier TEST";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 310);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -164,6 +176,7 @@ namespace Tests.Interfaces
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button8;
     }
 }
 

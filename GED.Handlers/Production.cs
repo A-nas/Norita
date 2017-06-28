@@ -6,19 +6,15 @@ using System.Threading.Tasks;
 
 namespace GED.Handlers
 {
-    class Production
+    public class Production
     {
         List<IActe> actes;
         List<string> responses;
         public static Production refInstance;
 
         public static Production instance(List<IActe> _actes){
-            if(refInstance == null)
-            {
-                refInstance = new Production
-                {
-                    actes = _actes
-                };
+            if(refInstance == null){
+                refInstance = new Production{ actes = _actes };
             }
             return refInstance;        
         }
