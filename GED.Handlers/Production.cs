@@ -12,7 +12,6 @@ namespace GED.Handlers
         List<string> responses;
         public static Production refInstance;
 
-
         public static Production instance(List<IActe> _actes){
             if(refInstance == null)
             {
@@ -21,14 +20,14 @@ namespace GED.Handlers
                     actes = _actes
                 };
             }
-            return refInstance;
-            
+            return refInstance;        
         }
 
-        public static void envoyerProd(List<IActe> actes){ // passer une liste d'actes SPI directement.
+        public async static Task<string[]> envoyerProd(List<IActe> actes){ // passer une liste d'actes SPI directement.
             int nombreActes = actes.Count();
             string[] response = new string[nombreActes];
-            for(int i=0; i < nombreActes; i++) response[i] = actes[i].sendProd();
+            for(int i=0; i < nombreActes; i++) response[i] = (await actes[i].sendProd());
+            return response;
         }
     }
 }
