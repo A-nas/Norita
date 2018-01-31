@@ -25,16 +25,6 @@ using System.Web.Script.Serialization;
 
 namespace GenerationProd
 {
-    /// <summary>
-    /// Description résumée de Service1
-    /// </summary>
-    //OLD
-    //[WebService(Namespace = "http://62.161.183.114:1519/GenerationProd.asmx")]   //QUALIF
-    //[WebService(Namespace = "http://62.161.183.114:8064/GenerationProd.asmx")]     //PROD
-
-    //NEW
-    //[WebService(Namespace = "http://dev-extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]      //DEV
-    //[WebService(Namespace = "http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]   //QUALIF
     [WebService(Namespace = "http://extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]   //PROD
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
@@ -413,19 +403,6 @@ namespace GenerationProd
                         Directory.CreateDirectory(completArchivePath);
 
 
-                    string partner_id = ConfigurationManager.AppSettings["XML_AEP_partner_id"];
-                    string partner_name = ConfigurationManager.AppSettings["XML_AEP_partner_name"];
-                    string partner_contact = ConfigurationManager.AppSettings["XML_AEP_partner_contact"];
-                    string return_mail = ConfigurationManager.AppSettings["XML_AEP_return_mail"];
-                    string operation_type = ConfigurationManager.AppSettings["XML_AEP_operation_type"];
-                    string incoming_type = ConfigurationManager.AppSettings["XML_AEP_incoming_type"];
-                    string status = ConfigurationManager.AppSettings["XML_AEP_status"];
-                    string type_pr100 = ConfigurationManager.AppSettings["XML_AEP_type_pr100"];
-                    string type_montant = ConfigurationManager.AppSettings["XML_AEP_type_montant"];
-                    string invest_allocation_type = ConfigurationManager.AppSettings["XML_AEP_invest_allocation_type"];
-                    string invest_allocation_value = ConfigurationManager.AppSettings["XML_AEP_invest_allocation_value"];
-                    string invest_modality = ConfigurationManager.AppSettings["XML_AEP_invest_modality"];
-
                     XElement xml_root = new XElement("root");
                     XElement xml_demand_list = new XElement("demand_list");
 
@@ -648,48 +625,6 @@ namespace GenerationProd
                 string compagnie = codeCompagnie;
                 string adresse1 = "";
                 string adresse2 = "";
-
-                switch (codeCompagnie)
-                {
-                    case "LMP":
-                        compagnie = "LA MONDIALE";
-                        adresse1 = "32, avenue Emile Zola";
-                        adresse2 = "TSA 61022 MONS EN BAROEUL";
-
-                        break;
-
-                    case "LMEP":
-                        compagnie="LA MONDIALE EUROPARTNER SA";
-                        adresse1 = "BP2122";
-                        adresse2 = "L-1021 LUXEMBOURG";
-
-                        break;
-                    case "AEP":
-                        compagnie = "AEP – Assurance Epargne Pension";
-                        adresse1 = "76, rue de la Victoire";
-                        adresse2 = "75009 PARIS";
-
-                        break;
-                    case "CNP":
-                        compagnie = "CNP Assurances";
-                        adresse1 = "4, place Raoul Dautry";
-                        adresse2 = "75716 PARIS Cedex 15";
-
-                        break;
-                    case "SPI":
-                        compagnie = "SPIRICA";
-                        adresse1 = "31, rue Falguière";
-                        adresse2 = "75015 PARIS";
-
-                        break;
-
-                    case "IWI":
-                        compagnie = "IWI International Wealth Insurer S.A.";
-                        adresse1 = "2, rue Nicolas Bové";
-                        adresse2 = "L-1253 LUXEMBOURG";
-
-                        break;
-                }
 
                 TextField myField = docInter.Fields["Compagnie"] as TextField;
                 myField.Value = compagnie;
